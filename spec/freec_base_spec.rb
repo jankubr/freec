@@ -58,6 +58,14 @@ describe Freec do
   end
   
   describe "event recognition" do
+
+    it "should subscribe to events of other leg channel after bridge" do
+      bridge_event = EVENT.sub('CHANNEL_EXECUTE', 'CHANNEL_BRIDGE').sub('Caller-Profile-Index: 1', 'Other-Leg-Unique-ID: 6c75cb42-e72d-48bf-9ecf-d71bd4b60617')
+      @freec.instance_variable_set(:@response, bridge_event)
+      @freec.send(:parse_response)
+      @freec.should_receive(:send_and_read).with("filter Unique-ID 6c75cb42-e72d-48bf-9ecf-d71bd4b60617")
+      @freec.send(:subscribe_to_new_channel_events)
+    end
     
     it "should recognize last event was DTMF to call the on_dtmf callback" do
       dtmf_event = EVENT.sub('CHANNEL_EXECUTE', 'DTMF')

@@ -22,6 +22,7 @@ class Freec
   def handle_call #:nodoc:
     call_initialization    
     loop do
+      subscribe_to_new_channel_events
       if last_event_dtmf? && respond_to?(:on_dtmf)
         callback(:on_dtmf, call_vars[:dtmf_digit])
       elsif waiting_for_this_response? || execute_completed?
@@ -104,6 +105,11 @@ private
     parse_response    
     send_and_read("filter Unique-ID #{@unique_id}") 
     parse_response    
+  end
+  
+  def subscribe_to_new_channel_events
+    return unless call_vars[:event_name] == 'CHANNEL_BRIDGE'
+    send_and_read("filter Unique-ID #{call_vars[:other_leg_unique_id]}")
   end
       
   def waiting_for_this_response?
