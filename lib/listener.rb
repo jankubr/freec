@@ -2,17 +2,20 @@ require 'gserver'
 require 'freec_logger'
 
 class Listener < GServer  
-  def initialize(host, port, application_class_name) #:nodoc:
+  def initialize(application_class_name, config) #:nodoc:
     @application_class_name = application_class_name
     @logger = FreecLogger.new(dev_or_test? ? STDOUT : @@log_file)
     @logger.level = Logger::INFO unless dev_or_test?
-    super(port, host, (1.0/0.0))
+    @config = config
+    host = @config['listen_ip'] || '127.0.0.1'
+    port = @config['listen_port'] || '8084'    
+    super(port.to_i, host, (1.0/0.0))
     self.audit = true
     connect_to_database
   end
         
   def serve(io) #:nodoc:
-    app = Kernel.const_get(@application_class_name).new(io, @logger)
+    app = Kernel.const_get(@application_class_name).new(io, @logger, @config)
     app.handle_call
   rescue StandardError => e
     @logger.error e.message

@@ -10,13 +10,14 @@ class Freec
   include FreeswitchApplications
   include CallVariables
   
-  attr_reader :call_vars, :event_body, :log
+  attr_reader :call_vars, :event_body, :log, :config
   
-  def initialize(io, log) #:nodoc:
+  def initialize(io, log, config) #:nodoc:
     @call_vars ||= {}
     @last_app_executed = 'initial_step'
     @io = io    
     @log = log
+    @config = config
   end
         
   def handle_call #:nodoc:

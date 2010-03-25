@@ -16,9 +16,19 @@ describe Freec do
 
   before do
     @io = stub(:io)
-    log = FreecLogger.new(STDOUT)
-    log.level = Logger::FATAL
-    @freec = Freec.new(@io, log)
+    @log = FreecLogger.new(STDOUT)
+    @log.level = Logger::FATAL
+    @config = {:config1 => 'value'}
+    @freec = Freec.new(@io, @log, @config)
+  end
+  
+  describe "initialization" do
+
+    it "makes log and config available" do
+      @freec.log.should == @log
+      @freec.config.should == @config
+    end
+
   end
 
   describe "call initialization" do

@@ -5,7 +5,7 @@ describe Freec do
     io = stub(:io)
     log = FreecLogger.new(STDOUT)
     log.level = Logger::FATAL
-    @freec = Freec.new(io, log)
+    @freec = Freec.new(io, log, {})
   end
   
   describe "parses body-less event" do

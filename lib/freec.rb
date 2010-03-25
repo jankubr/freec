@@ -4,6 +4,7 @@ require "freec_base"
 require 'listener'
 
 require 'fileutils'
+require 'yaml'
 require 'daemons/daemonize'
 include Daemonize
 
@@ -37,7 +38,6 @@ def load_freec_app_config
   else
     @@config = {}
   end
-  @@config['listen_port'] ||= '8084' 
 end
 
 def freec_app_configuration_file
@@ -45,18 +45,18 @@ def freec_app_configuration_file
 end
 
 unless defined?(TEST)
-  at_exit do
-    ROOT = File.expand_path(File.dirname($0))
-    ENVIRONMENT = ARGV[0] == '-d' ? 'production' : 'development'
-    create_freec_app_log_dir
-    load_freec_app_config
-    if ARGV[0] == '-d'
-      puts 'Daemonizing...'
-      daemonize(freec_app_log_file)
-    end
-    open(freec_app_pid_file, "w") {|f| f.write(Process.pid) }
+  ROOT = File.expand_path(File.dirname($0))
+  ENVIRONMENT = ARGV[0] == '-d' ? 'production' : 'development'
+  create_freec_app_log_dir
+  load_freec_app_config
+  if ARGV[0] == '-d'
+    puts 'Daemonizing...'
+    daemonize(freec_app_log_file)
+  end
+  open(freec_app_pid_file, "w") {|f| f.write(Process.pid) }
 
-    server = Listener.new('0.0.0.0', @@config['listen_port'].to_i, freec_app_class_name)
+  at_exit do
+    server = Listener.new(freec_app_class_name, @@config)
     server.audit = true
     server.start
     puts "Listening on port #{@@config['listen_port']}"
