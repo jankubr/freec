@@ -3,10 +3,10 @@ require 'rake'
 require 'echoe'
 
 Echoe.new('freec', '0.2.0') do |p|
-  p.description    = "Layer between your Ruby voice app and Freeswitch."
+  p.description    = "The layer between your Ruby voice app and FreeSWITCH."
   p.url            = "http://github.com/jankubr/freec"
   p.author         = "Jan Kubr"
-  p.email          = "hi@jankubr.com"
+  p.email          = "mail@jankubr.com"
   p.ignore_pattern = []
   p.runtime_dependencies = ['daemons']
   p.development_dependencies = ['rspec']
@@ -25,7 +25,7 @@ spec = Gem::Specification.new do |s|
   s.email             = "hi@jankubr.com"
   s.homepage          = "http://github.com/jankubr/freec"
   s.platform          = Gem::Platform::RUBY
-  s.summary           = "Layer between your Ruby voice app and Freeswitch."
+  s.summary           = "The layer between your Ruby voice app and FreeSWITCH."
   s.files             = FileList["README*",
                                  "Rakefile",
                                  "{lib,spec}/**/*"].to_a
