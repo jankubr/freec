@@ -59,7 +59,6 @@ unless defined?(TEST)
     server = Listener.new(freec_app_class_name, @@config)
     server.audit = true
     server.start
-    puts "Listening on port #{@@config['listen_port']}"
     loop do
       break if server.stopped?
       sleep(1)

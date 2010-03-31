@@ -2,13 +2,16 @@ require 'gserver'
 require 'freec_logger'
 
 class Listener < GServer  
+  DEFAULT_PORT = '8084'
+  DEFAULT_IP = '127.0.0.1'
+  
   def initialize(application_class_name, config) #:nodoc:
     @application_class_name = application_class_name
     @logger = FreecLogger.new(dev_or_test? ? STDOUT : @@log_file)
     @logger.level = Logger::INFO unless dev_or_test?
     @config = config
-    host = @config['listen_ip'] || '127.0.0.1'
-    port = @config['listen_port'] || '8084'    
+    host = @config['listen_ip'] || DEFAULT_IP
+    port = @config['listen_port'] || DEFAULT_PORT
     super(port.to_i, host, (1.0/0.0))
     self.audit = true
     connect_to_database
