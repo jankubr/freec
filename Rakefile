@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 require 'echoe'
 
-Echoe.new('freec', '0.2.0') do |p|
+Echoe.new('freec', '0.2.2') do |p|
   p.description    = "The layer between your Ruby voice app and FreeSWITCH."
   p.url            = "http://github.com/jankubr/freec"
   p.author         = "Jan Kubr"
@@ -20,7 +20,7 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name              = "freec"
-  s.version           = '0.2.0'
+  s.version           = '0.2.2'
   s.author            = "Jan Kubr"
   s.email             = "hi@jankubr.com"
   s.homepage          = "http://github.com/jankubr/freec"

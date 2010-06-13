@@ -106,6 +106,8 @@ private
     parse_response    
     send_and_read("filter Unique-ID #{@unique_id}") 
     parse_response    
+    send_and_read("divert_events on") 
+    parse_response
   end
   
   def subscribe_to_new_channel_events

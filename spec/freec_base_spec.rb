@@ -37,7 +37,8 @@ describe Freec do
       @freec.should_receive(:send_data).with("connect")
       @freec.should_receive(:send_data)
       @freec.should_receive(:send_data)
-      @io.should_receive(:gets).exactly(3).and_return(initial_response)
+      @freec.should_receive(:send_data)
+      @io.should_receive(:gets).exactly(4).and_return(initial_response)
       @freec.send :call_initialization
     end
     
@@ -45,7 +46,8 @@ describe Freec do
       @freec.should_receive(:send_data)
       @freec.should_receive(:send_data).with('events plain all')
       @freec.should_receive(:send_data).with('filter Unique-ID f3c2d5ee-d064-4f55-9280-5be2a65867e8')
-      @io.should_receive(:gets).exactly(3).and_return(initial_response)
+      @freec.should_receive(:send_data).with('divert_events on')
+      @io.should_receive(:gets).exactly(4).and_return(initial_response)
       @freec.send :call_initialization
     end
     
@@ -114,8 +116,9 @@ describe Freec do
       @freec.should_receive(:send_data).with("connect")
       @freec.should_receive(:send_data).with("events plain all")      
       @freec.should_receive(:send_data).with('filter Unique-ID f3c2d5ee-d064-4f55-9280-5be2a65867e8')
+      @freec.should_receive(:send_data).with('divert_events on')
       
-      @io.should_receive(:gets).and_return(initial_response, initial_response, initial_response, "bye\n\n")
+      @io.should_receive(:gets).and_return(initial_response, initial_response, initial_response, initial_response, "bye\n\n")
       @io.should_receive(:closed?).twice.and_return(false)
       @freec.should_receive(:step).and_return(nil)
       @freec.should_receive(:execute_app).with('hangup')
@@ -129,6 +132,7 @@ describe Freec do
       @freec.should_receive(:send_data).with("connect")
       @freec.should_receive(:send_data).with("events plain all")      
       @freec.should_receive(:send_data).with('filter Unique-ID f3c2d5ee-d064-4f55-9280-5be2a65867e8')
+      @freec.should_receive(:send_data).with('divert_events on')
       @io.should_receive(:gets).and_return(initial_response, initial_response, event_parts(disconnect_event)[0], event_parts(disconnect_event)[1])
       @io.should_receive(:closed?).twice.and_return(true)
       @freec.should_receive(:step).never
