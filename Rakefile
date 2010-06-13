@@ -1,16 +1,5 @@
 require 'rubygems'
 require 'rake'
-require 'echoe'
-
-Echoe.new('freec', '0.2.2') do |p|
-  p.description    = "The layer between your Ruby voice app and FreeSWITCH."
-  p.url            = "http://github.com/jankubr/freec"
-  p.author         = "Jan Kubr"
-  p.email          = "mail@jankubr.com"
-  p.ignore_pattern = []
-  p.runtime_dependencies = ['daemons']
-  p.development_dependencies = ['rspec']
-end
 
 desc 'Clean up files.'
 task :clean do |t|
@@ -22,7 +11,7 @@ spec = Gem::Specification.new do |s|
   s.name              = "freec"
   s.version           = '0.2.2'
   s.author            = "Jan Kubr"
-  s.email             = "hi@jankubr.com"
+  s.email             = "mail@jankubr.com"
   s.homepage          = "http://github.com/jankubr/freec"
   s.platform          = Gem::Platform::RUBY
   s.summary           = "The layer between your Ruby voice app and FreeSWITCH."
