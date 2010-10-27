@@ -23,7 +23,7 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc          = false
   s.extra_rdoc_files  = FileList["README*"].to_a
   s.rdoc_options << '--line-numbers' << '--inline-source'
-  s.requirements << "daemons"
+  s.add_dependency "daemons"
   s.add_development_dependency 'rspec'
 end
 
