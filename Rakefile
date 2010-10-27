@@ -9,7 +9,7 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name              = "freec"
-  s.version           = '0.2.2'
+  s.version           = '0.2.3'
   s.author            = "Jan Kubr"
   s.email             = "mail@jankubr.com"
   s.homepage          = "http://github.com/jankubr/freec"

@@ -13,7 +13,8 @@ class Freec
   attr_reader :call_vars, :event_body, :log, :config
   
   def initialize(io, log, config) #:nodoc:
-    @call_vars ||= {}
+    @call_vars = {}
+    @want_events_from = []
     @last_app_executed = 'initial_step'
     @io = io    
     @log = log
@@ -30,9 +31,8 @@ class Freec
         reset_wait_for if waiting_for_this_response?
         reload_application_code
         break if disconnect_notice? || !callback(:step)
-      end      
-      read_response
-      parse_response
+      end
+      read_and_parse_response
     end
     callback(:on_hangup)
     hangup unless @io.closed?
@@ -112,6 +112,7 @@ private
   
   def subscribe_to_new_channel_events
     return unless call_vars[:event_name] == 'CHANNEL_BRIDGE'
+    @want_events_from << call_vars[:other_leg_unique_id]
     send_and_read("filter Unique-ID #{call_vars[:other_leg_unique_id]}")
   end
       
@@ -131,6 +132,14 @@ private
   def send_and_read(data)
     send_data(data)
     read_response
+  end
+  
+  def read_and_parse_response
+    my_event = false
+    until my_event
+      read_response
+      my_event = parse_response
+    end    
   end
   
   def read_response
@@ -180,12 +189,17 @@ private
     @response.split("\n").each do |line|
       k,v = line.split(/\s*:\s*/)
       hash[k.strip.gsub('-', '_').downcase.to_sym] = URI.unescape(v).strip if k && v
-    end    
+    end
+    unless @unique_id
+      @unique_id = hash[:unique_id]
+      @want_events_from << @unique_id
+    end
+    return false unless @want_events_from.include?(hash[:unique_id])
     call_vars.merge!(hash)
-    @unique_id ||= call_vars[:unique_id]
     raise call_vars[:reply_text] if call_vars[:reply_text] =~ /^-ERR/
     log.debug "\n\tUnique ID: #{call_vars[:unique_id]}\n\tContent-type: #{call_vars[:content_type]}\n\tEvent name: #{call_vars[:event_name]}"
     @response = ''
+    true
   end
   
 end

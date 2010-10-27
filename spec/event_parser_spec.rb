@@ -9,7 +9,6 @@ describe Freec do
   end
   
   describe "parses body-less event" do
-
     before do
       @freec.instance_variable_set(:@response, EVENT)
       @freec.send :parse_response
@@ -17,6 +16,10 @@ describe Freec do
     
     it "should read unique id from response" do
       @freec.instance_variable_get(:@unique_id).should == 'f3c2d5ee-d064-4f55-9280-5be2a65867e8'
+    end
+    
+    it "should include channel unique id to the array of ids event variables are read from" do
+      @freec.instance_variable_get(:@want_events_from).should == ['f3c2d5ee-d064-4f55-9280-5be2a65867e8']
     end
     
     it "should parse variables from response" do
@@ -36,6 +39,20 @@ describe Freec do
     it "should make the value of the channel_destination_number variable available as a method" do
       @freec.channel_destination_number.should == '886'
     end
+  end
+  
+  describe "ignores variables from another channel event" do
+
+    it "should not parse variables from event of another channel" do
+      @freec.instance_variable_set(:@response, EVENT)
+      @freec.send(:parse_response).should be_true
+      another_channel_event = EVENT.sub('Unique-ID: f3c2d5ee-d064-4f55-9280-5be2a65867e8', 'Unique-ID: ffff1111-e72d-48bf-9ecf-d71bd4b60617').
+                                    sub('Application: set', 'Application: bridge')
+      @freec.instance_variable_set(:@response, another_channel_event)
+      @freec.send(:parse_response).should be_false
+      @freec.call_vars[:application].should == 'set'
+    end    
+    
   end
 
   describe "parses an event with a body" do
