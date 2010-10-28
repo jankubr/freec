@@ -51,6 +51,17 @@ describe Freec do
       @freec.instance_variable_set(:@response, another_channel_event)
       @freec.send(:parse_response).should be_false
       @freec.call_vars[:application].should == 'set'
+    end
+    
+    it "parses variables from disconnect notices" do
+      @freec.instance_variable_set(:@response, EVENT)
+      @freec.send(:parse_response).should be_true
+      @freec.call_vars[:content_type].should == 'text/event-plain'
+      disconnect_notice_event = EVENT.sub('Unique-ID: f3c2d5ee-d064-4f55-9280-5be2a65867e8', 'Unique-ID: ').
+                                    sub('Content-Type: text/event-plain', 'Content-Type: text/disconnect-notice')
+      @freec.instance_variable_set(:@response, disconnect_notice_event)
+      @freec.send(:parse_response).should be_true 
+      @freec.call_vars[:content_type].should == 'text/disconnect-notice'
     end    
     
   end

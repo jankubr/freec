@@ -194,7 +194,7 @@ private
       @unique_id = hash[:unique_id]
       @want_events_from << @unique_id
     end
-    return false unless @want_events_from.include?(hash[:unique_id])
+    return false unless @want_events_from.include?(hash[:unique_id]) || hash[:unique_id].blank?
     call_vars.merge!(hash)
     raise call_vars[:reply_text] if call_vars[:reply_text] =~ /^-ERR/
     log.debug "\n\tUnique ID: #{call_vars[:unique_id]}\n\tContent-type: #{call_vars[:content_type]}\n\tEvent name: #{call_vars[:event_name]}"
