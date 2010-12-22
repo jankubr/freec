@@ -143,8 +143,7 @@ private
   def read_response_info
     @response = ''
     begin
-      line = @io.gets.to_s
-      @response += line
+      @response += read_line_from_io
     end until @response[-2..-1] == "\n\n"    
   end
   
@@ -153,8 +152,7 @@ private
     return if header_length == 0
     header = ''
     begin
-      line = @io.gets.to_s
-      header += line.to_s
+      header += read_line_from_io
     end until header[-2..-1] == "\n\n"
     @response += header        
   end
@@ -163,9 +161,8 @@ private
     body_length = @response.sub(/^Content-Length.*^Content-Length: ([0-9]+)$.*/m, '\1').to_i
     return if body_length == 0
     body = ''
-    begin
-      line = @io.read(body_length).to_s
-      body += line.to_s
+    begin      
+      body += read_block_from_io(body_length)
     end until body.length == body_length
     @response += body    
   end
@@ -186,6 +183,22 @@ private
     raise call_vars[:reply_text] if call_vars[:reply_text] =~ /^-ERR/
     log.debug "\n\tUnique ID: #{call_vars[:unique_id]}\n\tContent-type: #{call_vars[:content_type]}\n\tEvent name: #{call_vars[:event_name]}"
     @response = ''
+  end
+  
+  def read_line_from_io
+    line = @io.gets
+    raise io_disconnected_message unless line
+    line
+  end
+  
+  def read_block_from_io(length)
+    block = @io.read(length)
+    raise io_disconnected_message  unless block
+    block
+  end
+  
+  def io_disconnected_message
+    "IO disconnected - FreeSWITCH crashed?"
   end
   
 end

@@ -59,12 +59,29 @@ describe Freec do
       @io.should_receive(:gets).and_return(event_parts(EVENT)[0], event_parts(EVENT)[1])
       @freec.send(:read_response)
     end
+
+    it "raises exception if IO is disconnected while reading response info" do
+      @io.should_receive(:gets).and_return(nil)
+      lambda { @freec.send(:read_response) }.should raise_error(RuntimeError, 'IO disconnected - FreeSWITCH crashed?')
+    end
+
+    it "raises exception if IO is disconnected while reading event header" do
+      @io.should_receive(:gets).and_return(event_parts(EVENT)[0], nil)
+      lambda { @freec.send(:read_response) }.should raise_error(RuntimeError, 'IO disconnected - FreeSWITCH crashed?')
+    end
     
     it "reads the full event with body" do
       @io.should_receive(:gets).and_return(event_parts(EVENT_WITH_BODY)[0], 
                                           event_parts(EVENT_WITH_BODY)[1])
       @io.should_receive(:read).and_return(event_parts(EVENT_WITH_BODY)[2].strip.chomp)
       @freec.send(:read_response)
+    end
+    
+    it "raises exception if IO is disconnected while reading body" do
+      @io.should_receive(:gets).and_return(event_parts(EVENT_WITH_BODY)[0], 
+                                          event_parts(EVENT_WITH_BODY)[1])
+      @io.should_receive(:read).and_return(nil)
+      lambda { @freec.send(:read_response) }.should raise_error(RuntimeError, 'IO disconnected - FreeSWITCH crashed?')
     end
   
   end

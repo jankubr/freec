@@ -9,7 +9,7 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name              = "freec"
-  s.version           = '0.2.2'
+  s.version           = '0.2.5'
   s.author            = "Jan Kubr"
   s.email             = "mail@jankubr.com"
   s.homepage          = "http://github.com/jankubr/freec"
@@ -27,7 +27,7 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency 'rspec'
 end
 
-desc "Generate a gemspec file for GitHub"
+desc "Generate a gemspec file"
 task :gemspec do
   File.open("#{spec.name}.gemspec", 'w') do |f|
     f.write spec.to_ruby
