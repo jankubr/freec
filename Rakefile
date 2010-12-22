@@ -23,8 +23,8 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc          = false
   s.extra_rdoc_files  = FileList["README*"].to_a
   s.rdoc_options << '--line-numbers' << '--inline-source'
-  s.requirements << "daemons"
-  s.add_development_dependency 'rspec'
+  s.add_dependency "daemons"
+  s.add_development_dependency 'rspec', '> 2.0.1'
 end
 
 desc "Generate a gemspec file"
@@ -34,9 +34,9 @@ task :gemspec do
   end
 end
 
-require 'spec/rake/spectask'
+require 'rspec/core/rake_task'
 
 desc "Run all specs"
-Spec::Rake::SpecTask.new('spec') do |t|
-  t.spec_files = FileList['spec/**/*.rb']
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = FileList['spec/**/*.rb']
 end

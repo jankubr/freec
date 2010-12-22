@@ -2,7 +2,7 @@
 Freec is a framework you can build voice applications on top of. It makes use of the Event socket outbound API of Freeswitch.
 
 = Installation
-  sudo gem install jankubr-freec
+  gem install freec
 
 = Usage
 1. Install Freeswitch and point a chosen extension to the IP where your app will run:

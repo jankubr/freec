@@ -86,14 +86,22 @@ describe Freec do
   
   end
   
+  
   describe "event recognition" do
 
+    it "ignores events for another channel" do
+      @freec.should_receive(:read_response).twice
+      @freec.should_receive(:parse_response).and_return(false, true)
+      @freec.send(:read_and_parse_response)
+    end
+  
     it "should subscribe to events of other leg channel after bridge" do
       bridge_event = EVENT.sub('CHANNEL_EXECUTE', 'CHANNEL_BRIDGE').sub('Caller-Profile-Index: 1', 'Other-Leg-Unique-ID: 6c75cb42-e72d-48bf-9ecf-d71bd4b60617')
       @freec.instance_variable_set(:@response, bridge_event)
       @freec.send(:parse_response)
       @freec.should_receive(:send_and_read).with("filter Unique-ID 6c75cb42-e72d-48bf-9ecf-d71bd4b60617")
       @freec.send(:subscribe_to_new_channel_events)
+      @freec.instance_variable_get(:@want_events_from).should == ["f3c2d5ee-d064-4f55-9280-5be2a65867e8", "6c75cb42-e72d-48bf-9ecf-d71bd4b60617"]
     end
     
     it "should recognize last event was DTMF to call the on_dtmf callback" do
@@ -161,15 +169,13 @@ describe Freec do
       
   end
   
-  describe "callback exception handling" do
-  
+  describe "callback exception handling" do  
     it "should catch and log any exception occurred in a callback" do
       @freec.should_receive(:callback_name).and_raise(RuntimeError)
       @freec.log.should_receive(:error).with('RuntimeError')
       @freec.log.should_receive(:error).at_least(1).times #backtrace
       lambda { @freec.send(:callback, :callback_name) }.should_not raise_error(Exception)
-    end
-  
+    end  
   end
   
   describe "custom waiting conditions" do
