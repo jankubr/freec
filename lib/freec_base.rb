@@ -74,7 +74,7 @@ private
   end
   
   def disconnect_notice?
-    call_vars[:content_type] == 'text/disconnect-notice'
+    @io.closed? || call_vars[:content_type] == 'text/disconnect-notice'
   end
 
   def callback(callback_name, *args)
