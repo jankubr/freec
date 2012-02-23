@@ -58,7 +58,7 @@ If you return nil or false from the step method, the call will be hungup.
 
 = Stinks?
 What Freec can do at the moment was enough for me to implement Telfa (http://telfapbx.com). If it doesn't fit your needs, you can:
-1. Complain to hi@jankubr.com .
+1. Complain to mail@jankubr.com .
 2. Fork it and change yourself.
 3. Check Liverpie (http://www.liverpie.com/) or Telegraph (http://code.google.com/p/telegraph/), Freec is inspired by them.
 4. Write yours :-)
