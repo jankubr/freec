@@ -1,7 +1,7 @@
 require "#{File.dirname(__FILE__)}/spec_helper"
 
 module FreeswitchApplicationsSpecHelper
-  def freeswitch_command(app, pars = nil)    
+  def freeswitch_command(app, pars = nil)
     cmd = "sendmsg "
     cmd += "\ncall-command: execute"
     cmd += "\nexecute-app-name: #{app}"
@@ -17,7 +17,7 @@ describe Freec do
     io = stub(:io)
     log = FreecLogger.new(STDOUT)
     log.level = Logger::FATAL
-    @freec = Freec.new(io, log, {})
+    @freec = FreecBase.new(io, log, {})
   end
 
   describe "executes Freeswitch applications" do
@@ -33,7 +33,7 @@ describe Freec do
       @freec.should_receive(:send_data).with(freeswitch_command('answer'))
       @freec.answer
     end
-  
+
     it "should execute the playback app when called the playback method" do
       @freec.should_receive(:send_data).with(freeswitch_command('playback', 'sounds/file.wav'))
       @freec.playback('sounds/file.wav')
@@ -113,16 +113,16 @@ describe Freec do
       @freec.should_receive(:send_data).with(freeswitch_command('stop_record_session', 'file.wav'))
       @freec.stop_recording('file.wav')
     end
-  
+
     it "should call the set app to set a variable" do
       @freec.should_receive(:send_data).with(freeswitch_command('set', 'name=value'))
       @freec.set_variable('name', 'value')
     end
-  
+
     it "should call the hangup app when caled the hangup method" do
       @freec.should_receive(:send_data).with(freeswitch_command('hangup'))
       @freec.hangup
     end
-    
+
   end
 end

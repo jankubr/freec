@@ -1,0 +1,39 @@
+PATH
+  remote: .
+  specs:
+    freec (0.2.7)
+      daemons (~> 1.2.4)
+      gserver (~> 0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    daemons (1.2.4)
+    diff-lcs (1.3)
+    gserver (0.0.1)
+    rake (10.5.0)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.14)
+  freec!
+  rake (~> 10.0)
+  rspec (~> 3.0)
+
+BUNDLED WITH
+   1.14.4

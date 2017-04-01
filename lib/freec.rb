@@ -1,6 +1,8 @@
+require 'freec/version'
 lib_dir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
-require "freec_base"
+require 'gserver'
+require 'freec_base'
 require 'listener'
 
 require 'fileutils'
@@ -9,7 +11,7 @@ require 'daemons/daemonize'
 include Daemonize
 
 def freec_app_file_name
-  $0.sub(/\.[^\.]*$/, '')  
+  $0.sub(/\.[^\.]*$/, '')
 end
 
 def freec_app_class_name
@@ -21,7 +23,7 @@ def freec_app_log_dir
 end
 
 def create_freec_app_log_dir
-  FileUtils.mkdir_p(freec_app_log_dir)  
+  FileUtils.mkdir_p(freec_app_log_dir)
 end
 
 def freec_app_log_file
@@ -59,9 +61,6 @@ unless defined?(TEST)
     server = Listener.new(freec_app_class_name, @@config)
     server.audit = true
     server.start
-    loop do
-      break if server.stopped?
-      sleep(1)
-    end
+    server.join
   end
 end
