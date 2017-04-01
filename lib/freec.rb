@@ -46,9 +46,9 @@ def freec_app_configuration_file
   "#{ROOT}/config/config.yml"
 end
 
-unless defined?(TEST)
-  ROOT = File.expand_path(File.dirname($0))
-  ENVIRONMENT = ARGV[0] == '-d' ? 'production' : 'development'
+ROOT = File.expand_path(File.dirname($0))
+ENVIRONMENT = ARGV[0] == '-d' ? 'production' : 'development'
+def start
   create_freec_app_log_dir
   load_freec_app_config
   if ARGV[0] == '-d'
