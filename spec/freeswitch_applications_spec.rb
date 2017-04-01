@@ -71,7 +71,7 @@ describe Freec do
 
     it "should set the time_limit_secs option send to the record method as the max length of the recording" do
       @freec.should_receive(:send_data).with(freeswitch_command('record', 'recordings/file.mp3 120'))
-      @freec.record('recordings/file.mp3', :time_limit_secs => 120)
+      @freec.record('recordings/file.mp3', time_limit_secs: 120)
     end
 
     it "should execute the read app when called the input method" do
@@ -81,27 +81,27 @@ describe Freec do
 
     it "should allow to pass the minimum and maximum digits to be read" do
       @freec.should_receive(:send_data).with(freeswitch_command('read', '2 5 sounds/file.mp3 input 10000 #'))
-      @freec.read('sounds/file.mp3', :min => 2, :max => 5)
+      @freec.read('sounds/file.mp3', min: 2, max: 5)
     end
 
     it "should allow to pass the timeout in seconds before the read apps before it times out" do
       @freec.should_receive(:send_data).with(freeswitch_command('read', '1 1 sounds/file.mp3 input 5000 #'))
-      @freec.read('sounds/file.mp3', :timeout => 5)
+      @freec.read('sounds/file.mp3', timeout: 5)
     end
 
     it "should allow to pass the terminator for the read app" do
       @freec.should_receive(:send_data).with(freeswitch_command('read', '1 1 sounds/file.mp3 input 10000 *'))
-      @freec.read('sounds/file.mp3', :terminators => '*')
+      @freec.read('sounds/file.mp3', terminators: '*')
     end
 
     it "should allow to pass the terminators as an array for the read app" do
       @freec.should_receive(:send_data).with(freeswitch_command('read', '1 1 sounds/file.mp3 input 10000 #,*'))
-      @freec.read('sounds/file.mp3', :terminators => ['#', '*'])
+      @freec.read('sounds/file.mp3', terminators: ['#', '*'])
     end
 
     it "should allow to specify the variable name the input is read by the read app" do
       @freec.should_receive(:send_data).with(freeswitch_command('read', '1 1 sounds/file.mp3 name 10000 #'))
-      @freec.read('sounds/file.mp3', :variable => 'name')
+      @freec.read('sounds/file.mp3', variable: 'name')
     end
 
     it "should execute the record_session app when called the start_recording method" do
@@ -120,9 +120,8 @@ describe Freec do
     end
 
     it "should call the hangup app when caled the hangup method" do
-      @freec.should_receive(:send_data).with(freeswitch_command('hangup'))
+      @freec.should_receive(:send_data).with(freeswitch_command('hangup', 'USER_BUSY'))
       @freec.hangup
     end
-
   end
 end

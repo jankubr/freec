@@ -146,7 +146,7 @@ describe Freec do
 
       @io.should_receive(:gets).and_return(initial_response, initial_response, initial_response, initial_response, "bye\n\n")
       @freec.should_receive(:step).and_return(nil)
-      @freec.should_receive(:execute_app).with('hangup')
+      @freec.should_receive(:execute_app).with('hangup', 'USER_BUSY')
       @freec.should_receive(:on_hangup)
       @freec.should_receive(:send_data).with("exit")
       @freec.handle_call
@@ -156,16 +156,12 @@ describe Freec do
       io = double()
       io.should_receive(:closed?).and_return(false, false, false, false, false, true, true)
       freec = FreecBase.new(io, @log, @config)
-      # io = double()
-      # @io.stub(:closed?) { false }
-#@io.stub(:closed?) { true }
       disconnect_event = EVENT.sub('text/event-plain', 'text/disconnect-notice')
       freec.should_receive(:send_data).with("connect")
       freec.should_receive(:send_data).with("events plain all")
       freec.should_receive(:send_data).with('filter Unique-ID f3c2d5ee-d064-4f55-9280-5be2a65867e8')
       freec.should_receive(:send_data).with('divert_events on')
       io.should_receive(:gets).and_return(initial_response, initial_response, event_parts(disconnect_event)[0], event_parts(disconnect_event)[1])
-#      @io.should_receive(:closed?).twice.and_return(true)
       freec.should_receive(:step).never
       freec.should_receive(:on_hangup)
       freec.should_receive(:execute_app).never
